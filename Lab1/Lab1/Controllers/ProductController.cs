@@ -9,9 +9,20 @@ namespace Lab1.Controllers
     public class ProductController : ControllerBase
     {
         [HttpGet("{id:int}")]
-        public Product GetProduct(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<Product> GetProduct(int id)
         {
-            return ProductStore.Products.FirstOrDefault(a => a.Id == id);
+            if (id <= 0)
+                return BadRequest();
+
+            var product = ProductStore.Products.FirstOrDefault(a => a.Id == id);
+
+            if (product == null)
+                return NotFound();
+
+            return Ok(product);
         }
     }
 }
