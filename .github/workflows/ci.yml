@@ -32,11 +32,11 @@ jobs:
     - name: SonarCloud Scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_PROJECT_NAME: ${{ secrets.SONAR_PROJECT_NAME }}
+        SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
       run: |
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global dotnet-coverage
-        dotnet sonarscanner begin /o:"rsukhaniuk" /k:"$SONAR_PROJECT_NAME" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="$SONAR_TOKEN" -d:sonar.inclusions="Lab1/**" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+        dotnet sonarscanner begin /o:"rsukhaniuk" /k:"$SONAR_PROJECT_KEY" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="$SONAR_TOKEN" -d:sonar.inclusions="Lab1/**" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
         dotnet build ./Lab1/Lab1.sln
         dotnet-coverage collect dotnet test -f xml -o coverage.xml ./Lab1/Lab1.sln
         dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
