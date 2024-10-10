@@ -15,7 +15,7 @@ namespace Lab1.UnitTests.Controllers
         }
 
         [Test]
-        public void GetProduct_IdIsZero_ReturnsBadRequest()
+        public void GetProduct_IdIsLessOrEqualToZero_ReturnsBadRequest()
         {
             var result = _controller.GetProduct(0);
 
