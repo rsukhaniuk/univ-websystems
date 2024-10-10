@@ -1,0 +1,48 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore ./Lab1/univ-websystems.sln
+      
+    - name: Build
+      run: dotnet build ./Lab1/univ-websystems.sln --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test ./Lab1/univ-websystems.sln --configuration Release --no-restore --no-build --logger trx --results-directory ./test-report
+      
+    - name: Publish artifact
+      run: dotnet publish ./Lab1/univ-websystems.sln -c Release -o output
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifact
+        path: output
+        
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-report
+        path: ./test-report
