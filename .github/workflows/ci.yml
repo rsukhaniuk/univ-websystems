@@ -24,16 +24,16 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Restore dependencies
-      run: dotnet restore ./Lab1/univ-websystems.sln
+      run: dotnet restore ./Lab1/Lab1.sln
       
     - name: Build
-      run: dotnet build ./Lab1/univ-websystems.sln --configuration Release --no-restore
+      run: dotnet build ./Lab1/Lab1.sln --configuration Release --no-restore
       
     - name: Test
-      run: dotnet test ./Lab1/univ-websystems.sln --configuration Release --no-restore --no-build --logger trx --results-directory ./test-report
+      run: dotnet test ./Lab1/Lab1.sln --configuration Release --no-restore --no-build --logger trx --results-directory ./test-report
       
     - name: Publish artifact
-      run: dotnet publish ./Lab1/univ-websystems.sln -c Release -o output
+      run: dotnet publish ./Lab1/Lab1.sln -c Release -o output
       
     - name: Upload artifact
       uses: actions/upload-artifact@v3
