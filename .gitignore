@@ -28,3 +28,6 @@
 /Lab1/.sonarqube/conf/SonarQubeAnalysisConfig.xml
 /Lab1/.sonarqube/conf/vbnet
 /Lab1/.sonarqube/conf/vbnet/SonarLint.xml
+/.sonarqube
+/.vs
+/coverage.xml
