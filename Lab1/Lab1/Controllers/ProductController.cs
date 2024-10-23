@@ -15,8 +15,6 @@ namespace Lab1.Controllers
         public ActionResult<Product> GetProduct(int id)
         {
 
-            int a = 15;
-            int b = 7;
             if (id <= 0)
                 return BadRequest();
 

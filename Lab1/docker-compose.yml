@@ -1,0 +1,14 @@
+services:
+  lab1:
+    image: ${DOCKER_REGISTRY-}lab1
+    build:
+      context: Lab1
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  
+      - "8081:8081"
+    
+
+
+
+    
