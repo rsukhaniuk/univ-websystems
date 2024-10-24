@@ -1,48 +1,60 @@
+version: '3.4'
+
 services:
   lab1:
-    container_name: lab1
+    container_name: Lab1    
+    hostname: lab1
     image: ${DOCKER_REGISTRY-}lab1
     build:
       context: Lab1
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "8080:8080"  
-      - "8081:8081"
-    networks:
-      - monitoring
-
+        - 8082:80
+        - 8084:443
+    depends_on:
+        prometheus:
+            condition: service_healthy
+        grafana:
+            condition: service_healthy
+    
+  grafana:
+    container_name: lab1_grafana
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+        - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+        - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    depends_on:
+        prometheus:
+            condition: service_healthy
+    healthcheck:
+        test: wget -q --tries=1 -O- http://localhost:3000/
+        interval: 3s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    restart: always
     ports:
-      - "9090:9090"
+      - 9090:9090
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    networks:
-      - monitoring
+    healthcheck:
+        test: wget -q --tries=1 -O- http://localhost:9090/
+        interval: 3s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - ./grafana:/var/lib/grafana
-    depends_on:
-      - prometheus
-    networks:
-      - monitoring
 
-networks:
-  monitoring:
+
 
  
     

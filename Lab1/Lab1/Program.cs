@@ -8,7 +8,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.UseHttpClientMetrics();
+builder.Services.AddHttpClient();
 
 
 var app = builder.Build();
@@ -20,13 +20,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMetricServer();
+//adding metrics related to HTTP
+
+
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseHttpMetrics(options =>
+{
+    options.AddCustomLabel("host", context => context.Request.Host.Host);
+});
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseMetricServer();
-app.UseHttpMetrics();
-
 app.Run();
+
