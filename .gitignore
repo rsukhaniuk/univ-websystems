@@ -31,3 +31,7 @@
 /.sonarqube
 /.vs
 /coverage.xml
+/Lab1/config.env
+/Lab1/newrelic-infra.dockerfile
+/Lab1/newrelic-infra.yml
+/Lab1/.env
