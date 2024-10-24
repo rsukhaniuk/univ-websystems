@@ -5,12 +5,23 @@ services:
     container_name: Lab1    
     hostname: lab1
     image: ${DOCKER_REGISTRY-}lab1
+    env_file: ./.env
     build:
       context: Lab1
       dockerfile: Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=https://+:443;http://+:80
+        # Enable the agent
+        - ENV CORECLR_ENABLE_PROFILING=1 
+        - CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} 
+        - CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent 
+        - CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so 
+        - NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY} 
+        - NEW_RELIC_APP_NAME="Lab1"
+        - NEW_RELIC_REGION=eu
+        - NEW_RELIC_LOG_LEVEL=debug
+        - DefaultConnection=Server=LAPTOP-ROMAN;Database=UnivWebLab1DB;Trusted_Connection=True;TrustServerCertificate=true
     ports:
         - 8082:80
         - 8084:443
@@ -52,6 +63,20 @@ services:
         timeout: 3s
         retries: 10
         start_period: 10s
+  newrelic-infra:
+    container_name: newrelic-infra
+    image: newrelic/infrastructure:latest
+    env_file: ./.env
+    network_mode: host
+    cap_add:
+      - SYS_PTRACE
+    privileged: true
+    pid: host
+    environment:
+      - NRIA_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
+    volumes:
+      - "/:/host:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 
 
