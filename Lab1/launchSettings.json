@@ -4,7 +4,9 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "lab1": "StartDebugging"
+        "lab1": "StartDebugging",
+        "grafana": "StartWithoutDebugging",
+        "prometheus": "StartWithoutDebugging"
       }
     }
   }

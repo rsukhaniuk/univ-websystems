@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lab1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241024163713_AddProductsToDb")]
+    [Migration("20241024164535_AddProductsToDb")]
     partial class AddProductsToDb
     {
         /// <inheritdoc />
