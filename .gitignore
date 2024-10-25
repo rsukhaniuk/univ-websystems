@@ -35,3 +35,4 @@
 /Lab1/newrelic-infra.dockerfile
 /Lab1/newrelic-infra.yml
 /Lab1/.env
+/Lab1/secrets/machine-key
