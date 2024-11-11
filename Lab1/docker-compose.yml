@@ -13,11 +13,12 @@ services:
   k6:
     image: grafana/k6
     depends_on:
-        - lab1
-    entrypoint: ["k6", "run", "--out", "json=/results/k6_results.json", "--out", "cloud", "/scripts/combined_load_test.js"]
+      - lab1
+    entrypoint: ["k6", "run", "--out", "json=/scripts/results/k6_results.json", "--out", "cloud", "/scripts/combined_load_test.js"]
     environment:
-        - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
-        - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
+      - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
+      - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
     volumes:
-        - ./Lab1/k6:/scripts
+      - ./Lab1/k6:/scripts      
+      - ./Lab1/k6/results:/results  
   
