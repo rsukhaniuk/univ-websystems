@@ -11,6 +11,7 @@
     <DockerComposeProjectName>lab1-backend-dev</DockerComposeProjectName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".env" />
     <None Include="k6\combined_load_test.js" />
     <None Include="k6\constant_rate_test.js" />
     <None Include="k6\constant_vus_test.js" />
