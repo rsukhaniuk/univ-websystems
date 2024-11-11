@@ -22,15 +22,41 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Set up Docker Compose and Run Tests
+      - name: Run Constant Load Test
         env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_TOKEN }}
           K6_CLOUD_PROJECT_ID: "3723622"
         run: |
-          docker-compose -f Lab1/docker-compose.yml up --abort-on-container-exit
+          docker-compose -f Lab1/docker-compose.yml run --rm k6_constant_load
 
-      - name: Upload K6 Test Results
+      - name: Upload Constant Load Test Results
         uses: actions/upload-artifact@v3
         with:
-          name: k6-results
-          path: Lab1/k6/results/k6_results.json
+          name: k6-constant-load-results
+          path: Lab1/k6/results/k6_constant_load_results.json
+
+      - name: Run Ramping Load Test
+        env:
+          K6_CLOUD_TOKEN: ${{ secrets.K6_TOKEN }}
+          K6_CLOUD_PROJECT_ID: "3723622"
+        run: |
+          docker-compose -f Lab1/docker-compose.yml run --rm k6_ramping_load
+
+      - name: Upload Ramping Load Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-ramping-load-results
+          path: Lab1/k6/results/k6_ramping_load_results.json
+
+      - name: Run Constant Rate Test
+        env:
+          K6_CLOUD_TOKEN: ${{ secrets.K6_TOKEN }}
+          K6_CLOUD_PROJECT_ID: "3723622"
+        run: |
+          docker-compose -f Lab1/docker-compose.yml run --rm k6_constant_rate
+
+      - name: Upload Constant Rate Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-constant-rate-results
+          path: Lab1/k6/results/k6_constant_rate_results.json
