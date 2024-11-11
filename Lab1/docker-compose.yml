@@ -19,6 +19,6 @@ services:
       - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
       - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
     volumes:
-      - ./Lab1/k6:/scripts      
-      - ./Lab1/k6/results:/results  
+      - ./k6:/scripts            
+      - ./k6/results:/results     
   
