@@ -26,7 +26,6 @@ jobs:
         env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_TOKEN }}
           K6_CLOUD_PROJECT_ID: "3723622"
-          UID: ${{ github.runner }}
         run: |
           docker-compose -f Lab1/docker-compose.yml up --abort-on-container-exit
 
