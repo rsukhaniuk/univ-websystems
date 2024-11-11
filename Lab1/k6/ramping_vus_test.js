@@ -23,8 +23,8 @@ export const options = {
 
 export default function () {
   const productId = getRandomProductId(1, 6); 
-  //const url = `http://localhost:5234/products/${productId}`;
-  const url = `http://lab1:8080/products/${productId}`;
+  const url = `http://localhost:5234/products/${productId}`;
+  //const url = `http://lab1:8080/products/${productId}`;
 
   const res = http.get(url);
 

@@ -8,6 +8,7 @@ export const options = {
             executor: 'constant-vus',
             vus: 10,
             duration: '30s',
+            startTime: '0s', 
         },
         ramping_load: {
             executor: 'ramping-vus',
@@ -18,6 +19,7 @@ export const options = {
                 { duration: '60s', target: 0 },
             ],
             gracefulRampDown: '0s',
+            startTime: '30s',
         },
         constant_rate: {
             executor: 'constant-arrival-rate',
@@ -26,6 +28,7 @@ export const options = {
             timeUnit: '1s',
             preAllocatedVUs: 5,
             maxVUs: 35,
+            startTime: '3m',
         },
         
     },
