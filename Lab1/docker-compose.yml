@@ -10,16 +10,55 @@ services:
         - 8080:8080
         - 8081:8081
 
-  k6:
+  k6_constant_load:
     image: grafana/k6
     depends_on:
       - lab1
-    entrypoint: ["k6", "run", "--out", "json=/results/k6_results.json", "--out", "cloud", "/scripts/combined_load_test.js"]
+    entrypoint: ["k6", "run", "--out", "json=/results/k6_constant_load_results.json", "--out", "cloud", "/scripts/constant_vus_test.js"]
     environment:
       - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
       - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
     user: root
     volumes:
       - ./k6:/scripts
-      - ./k6/results:/results 
+      - ./k6/results:/results
+
+  k6_ramping_load:
+    image: grafana/k6
+    depends_on:
+      - lab1
+    entrypoint: ["k6", "run", "--out", "json=/results/k6_ramping_load_results.json", "--out", "cloud", "/scripts/ramping_vus_test.js"]
+    environment:
+      - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
+      - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
+    user: root
+    volumes:
+      - ./k6:/scripts
+      - ./k6/results:/results
+
+  k6_constant_rate:
+    image: grafana/k6
+    depends_on:
+      - lab1
+    entrypoint: ["k6", "run", "--out", "json=/results/k6_constant_rate_results.json", "--out", "cloud", "/scripts/constant_rate_test.js"]
+    environment:
+      - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
+      - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
+    user: root
+    volumes:
+      - ./k6:/scripts
+      - ./k6/results:/results  
+
+  # k6:
+  #   image: grafana/k6
+  #   depends_on:
+  #     - lab1
+  #   entrypoint: ["k6", "run", "--out", "json=/results/k6_results.json", "--out", "cloud", "/scripts/combined_load_test.js"]
+  #   environment:
+  #     - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
+  #     - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
+  #   user: root
+  #   volumes:
+  #     - ./k6:/scripts
+  #     - ./k6/results:/results 
   

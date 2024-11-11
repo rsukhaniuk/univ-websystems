@@ -23,14 +23,16 @@ export const options = {
 
 export default function () {
   const productId = getRandomProductId(1, 6); 
-  const url = `http://localhost:5234/products/${productId}`;
+  //const url = `http://localhost:5234/products/${productId}`;
+  const url = `http://lab1:8080/products/${productId}`;
+
   const res = http.get(url);
 
   check(res, {
     'Response status is 200': (r) => r.status === 200,
   });
 
-  sleep(generateRandomDelay(1, 5)); 
+    sleep(generateRandomDelay(0.5, 2));
 }
 
 function getRandomProductId(min, max) {
