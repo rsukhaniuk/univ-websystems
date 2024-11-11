@@ -28,7 +28,7 @@ export const options = {
             timeUnit: '1s',
             preAllocatedVUs: 5,
             maxVUs: 35,
-            startTime: '3m',
+            startTime: '3m30s',
         },
         
     },
