@@ -11,15 +11,17 @@
     <DockerComposeProjectName>lab1-backend-dev</DockerComposeProjectName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include=".env" />
+    <None Include="k6\combined_load_test.js" />
+    <None Include="k6\constant_rate_test.js" />
+    <None Include="k6\constant_vus_test.js" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
-    <None Include="grafana\provisioning\dashboards\ASP.NET Core - controller summary (Prometheus)-1729760874345.json" />
-    <None Include="grafana\provisioning\dashboards\dashboard.yml" />
-    <None Include="grafana\provisioning\datasources\prometheus_ds.yml" />
-    <None Include="prometheus\prometheus.yml" />
+    <None Include="k6\results\results_constant.json" />
+    <None Include="k6\results\results_const_rate.json" />
+    <None Include="k6\results\results_ramping.json" />
+    <None Include="k6\ramping_vus_test.js" />
   </ItemGroup>
 </Project>

@@ -3,85 +3,21 @@ services:
     container_name: Lab1    
     hostname: lab1
     image: ${DOCKER_REGISTRY-}lab1
-    env_file: ./.env
     build:
       context: Lab1
       dockerfile: Dockerfile
-    environment:
-      - CORECLR_ENABLE_PROFILING=1
-      - CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A}
-      - CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent
-      - CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so
-      - NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
-      - NEW_RELIC_APP_NAME=UNIV-WEBSYSTEMS-LAB1 
-      - NEW_RELIC_REGION=eu
-      - NEW_RELIC_LOG_LEVEL=debug
     ports:
         - 8080:8080
         - 8081:8081
-    depends_on:
-        prometheus:
-            condition: service_healthy
-        grafana:
-            condition: service_healthy
-        # - sqlserver
-        
 
-  sqlserver:
-    container_name: sqlserver    
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  k6:
+    image: grafana/k6
+    depends_on:
+        - lab1
+    entrypoint: ["k6", "run", "--out", "json=/results/k6_results.json", "--out", "cloud", "/scripts/performance_test.js"]
     environment:
-        SA_PASSWORD: "Password12345!"
-        ACCEPT_EULA: "Y"
-    ports:
-        - "1433:1433"
+        - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
+        - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
     volumes:
-        - ./data:/var/opt/mssql/data
-        - ./log:/var/opt/mssql/log
-        - ./secrets:/var/opt/mssql/secrets   
-    
-  grafana:
-    container_name: lab1_grafana
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    volumes:
-        - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-        - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-    depends_on:
-        prometheus:
-            condition: service_healthy
-    healthcheck:
-        test: wget -q --tries=1 -O- http://localhost:3000/
-        interval: 3s
-        timeout: 3s
-        retries: 10
-        start_period: 10s
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    restart: always
-    ports:
-      - 9090:9090
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    healthcheck:
-        test: wget -q --tries=1 -O- http://localhost:9090/
-        interval: 3s
-        timeout: 3s
-        retries: 10
-        start_period: 10s
-
-
-
-
-
-
- 
-    
-    
-
-
-
-    
+        - ./Lab1/k6:/scripts
+  
