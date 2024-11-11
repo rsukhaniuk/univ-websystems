@@ -20,5 +20,5 @@ services:
       - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
     volumes:
       - ./k6:/scripts
-      - ./results:/results- 
+      - ./results:/results 
   
