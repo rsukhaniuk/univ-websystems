@@ -18,7 +18,7 @@ services:
     environment:
       - K6_CLOUD_TOKEN=${K6_CLOUD_TOKEN}
       - K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}
-    # user: root
+    user: root
     volumes:
       - ./k6:/scripts
       - ./k6/results:/results 
