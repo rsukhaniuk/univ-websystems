@@ -26,7 +26,6 @@ services:
   k6_ramping_load:
     image: grafana/k6
     depends_on:
-      - lab1
       - k6_constant_load
     entrypoint: ["k6", "run", "--out", "json=/results/k6_ramping_load_results.json", "--out", "cloud", "/scripts/ramping_vus_test.js"]
     environment:
@@ -40,7 +39,6 @@ services:
   k6_constant_rate:
     image: grafana/k6
     depends_on:
-      - lab1
       - k6_ramping_load
     entrypoint: ["k6", "run", "--out", "json=/results/k6_constant_rate_results.json", "--out", "cloud", "/scripts/constant_rate_test.js"]
     environment:
