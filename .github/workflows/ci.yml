@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: k6-results
-          path: ./results/k6_results.json
+          path: Lab1/k6/results/k6_results.json
