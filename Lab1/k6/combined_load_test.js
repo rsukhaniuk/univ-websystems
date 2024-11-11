@@ -9,24 +9,25 @@ export const options = {
             vus: 10,
             duration: '30s',
         },
-        //constant_rate: {
-        //    executor: 'constant-arrival-rate',
-        //    duration: '30s',
-        //    rate: 25,
-        //    timeUnit: '1s',
-        //    preAllocatedVUs: 5,
-        //    maxVUs: 35,
-        //},
-        //ramping_load: {
-        //    executor: 'ramping-vus',
-        //    startVUs: 0,
-        //    stages: [
-        //        { duration: '60s', target: 20 },
-        //        { duration: '60s', target: 20 },
-        //        { duration: '60s', target: 0 },
-        //    ],
-        //    gracefulRampDown: '0s',
-        //},
+        ramping_load: {
+            executor: 'ramping-vus',
+            startVUs: 0,
+            stages: [
+                { duration: '60s', target: 20 },
+                { duration: '60s', target: 20 },
+                { duration: '60s', target: 0 },
+            ],
+            gracefulRampDown: '0s',
+        },
+        constant_rate: {
+            executor: 'constant-arrival-rate',
+            duration: '30s',
+            rate: 25,
+            timeUnit: '1s',
+            preAllocatedVUs: 5,
+            maxVUs: 35,
+        },
+        
     },
   cloud: {
     projectID: 3723622,
