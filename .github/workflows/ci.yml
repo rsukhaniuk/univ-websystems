@@ -23,11 +23,12 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Set up Docker Compose and Run Tests
-        run: |
-          docker-compose -f Lab1/docker-compose.yml up --abort-on-container-exit
         env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_TOKEN }}
           K6_CLOUD_PROJECT_ID: "3723622"
+          UID: ${{ github.runner }}
+        run: |
+          docker-compose -f Lab1/docker-compose.yml up --abort-on-container-exit
 
       - name: Upload K6 Test Results
         uses: actions/upload-artifact@v3
