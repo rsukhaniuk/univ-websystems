@@ -25,7 +25,7 @@ jobs:
       - name: Set up Docker Compose and Run Tests
         env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_TOKEN }}
-          K6_CLOUD_PROJECT_ID: "3723622"
+          K6_CLOUD_PROJECT_ID: "3723689"
         run: |
           docker-compose -f Lab1/docker-compose.yml up --abort-on-container-exit
 
