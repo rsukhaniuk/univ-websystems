@@ -34,7 +34,6 @@ namespace Lab1.Controllers
 
             if (!string.IsNullOrEmpty(cachedProduct))
             {
-                // Повернути продукт із кешу
                 var productFromCache = JsonSerializer.Deserialize<Product>(cachedProduct);
                 return Ok(productFromCache);
             }
@@ -46,11 +45,10 @@ namespace Lab1.Controllers
             if (product == null)
                 return NotFound();
 
-            // Зберегти продукт у кеш із TTL
             var cacheOptions = new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5), 
-                SlidingExpiration = TimeSpan.FromMinutes(2) 
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                SlidingExpiration = TimeSpan.FromMinutes(2)
             };
 
             string serializedProduct = JsonSerializer.Serialize(product);
@@ -60,9 +58,9 @@ namespace Lab1.Controllers
         }
 
         // Ендпоінт для статичного контенту
-        [HttpGet("static-image")]
+        [HttpGet("StaticImahe")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetImage()
+        public async Task<IActionResult> GetImage()
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image.png");
 
@@ -72,6 +70,9 @@ namespace Lab1.Controllers
             }
 
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            await Task.Delay(2000);
+
             return File(fileBytes, "image/png"); 
         }
     }

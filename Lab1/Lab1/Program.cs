@@ -8,12 +8,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//builder.Services.AddStackExchangeRedisCache(options =>
+//{
+//    options.Configuration = "localhost:6379"; // Адреса Redis-сервера
+//    options.InstanceName = "MyAppRedisCache"; // Ім'я інстансу (опціонально)
+//});
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379"; // Адреса Redis-сервера
-    options.InstanceName = "MyAppRedisCache"; // Ім'я інстансу (опціонально)
+    options.Configuration = "redis:6379"; // Використовуємо ім'я сервісу Redis у Docker Compose
 });
-
 
 var app = builder.Build();
 
