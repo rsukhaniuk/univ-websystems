@@ -3,6 +3,8 @@ using Lab1.Models;
 using Microsoft.EntityFrameworkCore;
 using univ_websystems_test.Data;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Lab1.Controllers
 {
@@ -10,9 +12,9 @@ namespace Lab1.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IMemoryCache _cache;
+        private readonly IDistributedCache _cache;
 
-        public ProductController(IMemoryCache cache)
+        public ProductController(IDistributedCache cache)
         {
             _cache = cache;
         }
@@ -26,25 +28,51 @@ namespace Lab1.Controllers
             if (id <= 0)
                 return BadRequest();
 
-            var cacheKey = $"Product_{id}";
+            string cacheKey = $"Product_{id}";
 
-            if (!_cache.TryGetValue(cacheKey, out Product? product))
+            string cachedProduct = await _cache.GetStringAsync(cacheKey);
+
+            if (!string.IsNullOrEmpty(cachedProduct))
             {
-                product = ProductStore.Products.FirstOrDefault(a => a.Id == id);
-
-                if (product == null)
-                    return NotFound();
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(5))  // TTL
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(2)); // TTI
-
-                _cache.Set(cacheKey, product, cacheEntryOptions);
-
-                await Task.Delay(2000);
+                // Повернути продукт із кешу
+                var productFromCache = JsonSerializer.Deserialize<Product>(cachedProduct);
+                return Ok(productFromCache);
             }
 
+            await Task.Delay(2000);
+
+            var product = ProductStore.Products.FirstOrDefault(a => a.Id == id);
+
+            if (product == null)
+                return NotFound();
+
+            // Зберегти продукт у кеш із TTL
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5), 
+                SlidingExpiration = TimeSpan.FromMinutes(2) 
+            };
+
+            string serializedProduct = JsonSerializer.Serialize(product);
+            await _cache.SetStringAsync(cacheKey, serializedProduct, cacheOptions);
+
             return Ok(product);
+        }
+
+        // Ендпоінт для статичного контенту
+        [HttpGet("static-image")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetImage()
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image.png");
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Image not found");
+            }
+
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "image/png"); 
         }
     }
 }
