@@ -57,11 +57,12 @@ namespace Lab1.Controllers
             return Ok(product);
         }
 
-        // Ендпоінт для статичного контенту
-        [HttpGet("StaticImahe")]
+        [HttpGet("StaticImage")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetImage()
         {
+            await Task.Delay(5000);
+
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image.png");
 
             if (!System.IO.File.Exists(filePath))
@@ -71,7 +72,6 @@ namespace Lab1.Controllers
 
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-            await Task.Delay(2000);
 
             return File(fileBytes, "image/png"); 
         }
