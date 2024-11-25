@@ -61,8 +61,6 @@ namespace Lab1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetImage()
         {
-            await Task.Delay(5000);
-
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image.png");
 
             if (!System.IO.File.Exists(filePath))
@@ -72,8 +70,24 @@ namespace Lab1.Controllers
 
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
+            await Task.Delay(2000);
 
             return File(fileBytes, "image/png"); 
         }
+
+        [HttpGet("server-info")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetServerInfo()
+        {
+            var serverInfo = new
+            {
+                HostName = Environment.MachineName,
+                ReplicaId = Environment.GetEnvironmentVariable("REPLICA_ID") ?? "Unknown",
+                Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown"
+            };
+
+            return Ok(serverInfo);
+        }
+
     }
 }
